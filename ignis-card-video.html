@@ -148,7 +148,7 @@ z-index: 4;
 /* BACK */
 .card-back {
 transform: rotateY(180deg);
-background: linear-gradient(135deg, #0a0f16 0%, #111820 50%, #0a0f16 100%);
+background: #0a0f16;
 border: 1px solid rgba(255,100,30,0.3);
 box-shadow: 0 0 40px rgba(180,50,10,0.3), inset 0 1px 0 rgba(255,160,60,0.15);
 display: flex;
@@ -157,6 +157,8 @@ align-items: center;
 justify-content: flex-end;
 gap: 6px;
 padding-bottom: 4px;
+isolation: isolate;
+z-index: 1;
 }
 .back-title {
 font-family: ‘Cinzel’, serif;
@@ -178,8 +180,8 @@ box-shadow: 0 0 20px rgba(255,100,30,0.4);
 }
 .back-id {
 font-family: ‘Rajdhani’, sans-serif;
-font-size: 15px;
-font-weight: 700;
+font-size: 14px;
+font-weight: 400;
 letter-spacing: 3px;
 color: rgba(255,160,60,0.9);
 }
