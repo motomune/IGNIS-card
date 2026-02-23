@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IGNIS Member Card</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -42,7 +42,7 @@
 
   .scene {
     width: 380px;
-    height: 265px;
+    height: 278px;
     perspective: 1000px;
     cursor: pointer;
   }
@@ -152,15 +152,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 14px;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-bottom: 8px;
   }
   .back-title {
     font-family: 'Cinzel', serif;
-    font-size: 11px;
+    font-size: 14px;
+    font-weight: 900;
     letter-spacing: 5px;
-    color: rgba(255,130,50,0.6);
+    color: rgba(255,130,50,1);
     text-transform: uppercase;
+    text-align: center;
+    line-height: 1.6;
   }
   .qr-container {
     width: 110px;
@@ -172,9 +176,10 @@
   }
   .back-id {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 13px;
+    font-size: 15px;
+    font-weight: 700;
     letter-spacing: 3px;
-    color: rgba(255,160,60,0.5);
+    color: rgba(255,160,60,0.9);
   }
   .back-logo {
     font-family: 'Cinzel', serif;
@@ -208,14 +213,13 @@
       <video autoplay muted loop playsinline>
         <source src="IGNIS動画.mp4" type="video/mp4">
       </video>
-      <div class="front-overlay"></div>
+      <div style="position:absolute;top:12px;right:12px;width:60px;height:38px;background:#fff;border-radius:6px;z-index:3;"></div>
       <div style="position:absolute;bottom:0;left:0;width:100%;height:10%;background:#000;opacity:0.9;z-index:2;"></div>
       <div class="shimmer-line"></div>
       <div class="front-content">
         <div class="front-bottom">
-          <div class="member-name">X user name</div>
           <div class="member-info-row">
-            <span class="member-number">IGNIS-0001</span>
+            <span class="member-name">X user name</span>
             <span class="rank-badge">MEMBER</span>
           </div>
         </div>
@@ -224,13 +228,14 @@
 
     <!-- BACK -->
     <div class="card-face card-back">
-      <p class="back-title">Founder Information</p>
+      <p class="back-title">Founder Information<br><span style="font-size:11px;letter-spacing:3px;font-weight:700;">創設者 情報</span></p>
       <a href="https://linktr.ee/uchidamotomune" target="_blank" style="text-decoration:none;">
         <div class="qr-container">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://linktr.ee/uchidamotomune" width="94" height="94" alt="QR Code" style="display:block;border-radius:2px;"/>
         </div>
       </a>
-      <p class="back-id">IGNIS-0001</p>
+      <p style="font-family:'Dancing Script',cursive;font-size:22px;color:rgba(255,160,60,0.9);letter-spacing:2px;text-shadow:0 0 10px rgba(255,100,30,0.5);">You're not alone.</p>
+      <p class="back-id">IGNIS-0000-0001</p>
       <p class="back-logo">IGNIS</p>
     </div>
 
