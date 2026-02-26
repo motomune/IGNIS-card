@@ -222,7 +222,7 @@ text-transform: uppercase;
 ```
 <!-- FRONT -->
 <div class="card-face card-front">
-  <video autoplay muted loop playsinline>
+  <video autoplay loop playsinline id="bgVideo">
     <source src="https://res.cloudinary.com/dgbqedhog/video/upload/ignis-video.mp4" type="video/mp4">
   </video>
   <div style="position:absolute;top:14px;right:14px;width:36px;height:22px;background:#fff;border-radius:3px;z-index:3;display:flex;align-items:center;justify-content:center;"><div style="width:28px;height:16px;background:#fff;border:0.5px solid #000;border-radius:2px;"></div></div>
@@ -258,6 +258,12 @@ text-transform: uppercase;
 <p class="tap-hint">© IGNIS</p>
 
 <script>
+  // タップで音声ON
+  document.getElementById('bgVideo').addEventListener('click', function() {
+    this.muted = false;
+    this.play();
+  });
+
   // 日本語テキストをJavaScriptで設定
   document.getElementById('jaText').innerText = '\u5275\u8a2d\u8005\u3000\u60c5\u5831';
 
