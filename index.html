@@ -32,7 +32,7 @@
 
 .hint {
 color: rgba(255,160,60,0.5);
-font-family: âRajdhaniâ, sans-serif;
+font-family: ‘Rajdhani’, sans-serif;
 font-size: 13px;
 font-weight: 700;
 letter-spacing: 3px;
@@ -110,7 +110,7 @@ gap: 2px;
 padding-bottom: 0px;
 }
 .member-name {
-font-family: âCinzelâ, serif;
+font-family: ‘Cinzel’, serif;
 font-size: 16px;
 font-weight: 700;
 color: #fff;
@@ -123,13 +123,13 @@ justify-content: space-between;
 align-items: flex-end;
 }
 .member-number {
-font-family: âRajdhaniâ, sans-serif;
+font-family: ‘Rajdhani’, sans-serif;
 font-size: 12px;
 color: rgba(255,200,80,0.9);
 letter-spacing: 2px;
 }
 .rank-badge {
-font-family: âCinzelâ, serif;
+font-family: ‘Cinzel’, serif;
 font-size: 10px;
 font-weight: 700;
 letter-spacing: 3px;
@@ -167,7 +167,7 @@ isolation: isolate;
 z-index: 1;
 }
 .back-title {
-font-family: âCinzelâ, serif;
+font-family: ‘Cinzel’, serif;
 font-size: 14px;
 font-weight: 900;
 letter-spacing: 5px;
@@ -185,14 +185,14 @@ border-radius: 8px;
 box-shadow: 0 0 20px rgba(255,100,30,0.4);
 }
 .back-id {
-font-family: âRajdhaniâ, sans-serif;
+font-family: ‘Rajdhani’, sans-serif;
 font-size: 14px;
 font-weight: 400;
 letter-spacing: 3px;
 color: rgba(255,160,60,0.9);
 }
 .back-logo {
-font-family: âCinzelâ, serif;
+font-family: ‘Cinzel’, serif;
 font-size: 14px;
 font-weight: 900;
 letter-spacing: 8px;
@@ -214,7 +214,7 @@ text-transform: uppercase;
 </head>
 <body>
 
-<p class="hint">â¦ Tap to view your card â¦</p>
+<p class="hint">&#9670; TAP TO VIEW YOUR CARD &#9670;</p>
 
 <div class="scene" onclick="this.querySelector('.card').classList.toggle('flipped')">
   <div class="card">
@@ -240,7 +240,7 @@ text-transform: uppercase;
 
 <!-- BACK -->
 <div class="card-face card-back">
-  <p class="back-title">Founder Information<br><span style="font-size:11px;letter-spacing:3px;font-weight:700;">åµè¨­è æå ±</span></p>
+  <p class="back-title">Founder Information<br><span id="jaText" style="font-size:11px;letter-spacing:3px;font-weight:700;"></span></p>
   <a href="https://linktr.ee/uchidamotomune" target="_blank" style="text-decoration:none;">
     <div class="qr-container">
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://linktr.ee/uchidamotomune" width="94" height="94" alt="QR Code" style="display:block;border-radius:2px;"/>
@@ -255,10 +255,13 @@ text-transform: uppercase;
   </div>
 </div>
 
-<p class="tap-hint">Â© IGNIS</p>
+<p class="tap-hint">© IGNIS</p>
 
 <script>
-  // ã·ã¼ã¯ã¬ããã­ã¼ï¼ããªãã ããç¥ã£ã¦ããï¼
+  // 日本語テキストをJavaScriptで設定
+  document.getElementById('jaText').innerText = '\u5275\u8a2d\u8005\u3000\u60c5\u5831';
+
+  // シークレットキー（あなただけが知っている）
   const SECRET = "IGNIS2026";
 
   const params = new URLSearchParams(window.location.search);
@@ -266,7 +269,7 @@ text-transform: uppercase;
   const id = params.get('i');
   const token = params.get('t');
 
-  // ãã¼ã¯ã³æ¤è¨¼
+  // トークン検証
   function generateToken(n, i) {
     const str = n + i + SECRET;
     let hash = 0;
