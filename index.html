@@ -259,9 +259,10 @@ text-transform: uppercase;
 
 <script>
   // タップで音声ON
-  document.getElementById('bgVideo').addEventListener('click', function() {
-    this.muted = false;
-    this.play();
+  document.querySelector('.scene').addEventListener('click', function() {
+    const video = document.getElementById('bgVideo');
+    video.muted = false;
+    video.play();
   });
 
   // 日本語テキストをJavaScriptで設定
