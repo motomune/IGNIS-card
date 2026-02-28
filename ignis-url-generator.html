@@ -115,6 +115,15 @@
     <label>会員番号</label>
     <input type="number" id="idInput" placeholder="例: 1">
   </div>
+  <div>
+    <label>ランク</label>
+    <select id="rankInput" style="width:100%;padding:10px 14px;background:#0a0f16;border:1px solid rgba(255,100,30,0.4);border-radius:6px;color:#fff;font-size:16px;margin-top:6px;">
+      <option value="1">RANK1（白）</option>
+      <option value="2">RANK2（赤）</option>
+      <option value="3">RANK3（金）</option>
+      <option value="4">RANK4（虹）</option>
+    </select>
+  </div>
   <button onclick="generate()">URLを生成</button>
 </div>
 
@@ -126,7 +135,12 @@
 
 <script>
   const SECRET = "IGNIS2026";
-  const BASE_URL = "https://motomune.github.io/IGNIS-card";
+  const BASE_URLS = {
+    "1": "https://motomune.github.io/IGNIS-rank1",
+    "2": "https://motomune.github.io/IGNIS-rank2",
+    "3": "https://motomune.github.io/IGNIS-rank3",
+    "4": "https://motomune.github.io/IGNIS-rank4"
+  };
 
   function generateToken(n, i) {
     const str = n + i + SECRET;
@@ -138,9 +152,10 @@
   function generate() {
     const name = document.getElementById('nameInput').value.trim();
     const id = document.getElementById('idInput').value.trim();
+    const rank = document.getElementById('rankInput').value;
     if (!name || !id) { alert('名前と番号を入力してください'); return; }
     const token = generateToken(name, id);
-    const url = `${BASE_URL}?n=${encodeURIComponent(name)}&i=${id}&t=${token}`;
+    const url = `${BASE_URLS[rank]}?n=${encodeURIComponent(name)}&i=${id}&t=${token}`;
     document.getElementById('urlBox').innerText = url;
     document.getElementById('result').style.display = 'block';
   }
