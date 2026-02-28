@@ -213,16 +213,16 @@ text-transform: uppercase;
 0%, 100% { opacity: 0; transform: scale(0); }
 50% { opacity: 1; transform: scale(1.5); }
 }
-@keyframes goldStreakRTL {
-0% { transform: translateX(60px); opacity: 0; }
-40% { opacity: 1; }
-60% { opacity: 1; }
-100% { transform: translateX(-60px); opacity: 0; }
+@keyframes goldStreakLTR {
+0% { transform: translateX(-60px); opacity: 0; }
+30% { opacity: 1; }
+70% { opacity: 1; }
+100% { transform: translateX(60px); opacity: 0; }
 }
 @keyframes goldShimmer {
-0% { background-position: 0% 50%; }
-50% { background-position: 100% 50%; }
-100% { background-position: 0% 50%; }
+0% { background-position: 0% 50%; filter: brightness(0.8) saturate(1.8); }
+50% { background-position: 100% 50%; filter: brightness(1.5) saturate(2.2); }
+100% { background-position: 0% 50%; filter: brightness(0.8) saturate(1.8); }
 }
 @keyframes goldStreak {
 0% { transform: translateX(-60px); opacity: 0; }
@@ -259,8 +259,8 @@ text-transform: uppercase;
   </video>
   <div style="position:absolute;top:14px;right:14px;width:36px;height:22px;border-radius:3px;z-index:3;background:#1a1000;display:flex;align-items:center;justify-content:center;clip-path:inset(0 round 3px);">
     <div style="position:absolute;inset:0;background:linear-gradient(135deg,#bb8000,#f8b820,#ffe040,#ffd000,#f8b820,#bb8000);background-size:300% 300%;animation:goldShimmer 3s ease-in-out infinite;filter:brightness(1.2) saturate(1.8);"></div>
-    <div style="position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,245,150,0.95) 45%,rgba(255,255,200,0.7) 50%,transparent 60%);animation:goldStreakRTL 1.8s ease-in-out infinite;"></div>
-    <div style="position:absolute;inset:0;background:linear-gradient(125deg,transparent 30%,rgba(255,240,120,0.7) 45%,rgba(255,250,180,0.5) 50%,transparent 60%);animation:goldStreakRTL 1.8s ease-in-out infinite 0.9s;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,245,150,0.95) 45%,rgba(255,255,200,0.7) 50%,transparent 60%);animation:goldStreakLTR 1.8s ease-in-out infinite;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(125deg,transparent 30%,rgba(255,240,120,0.7) 45%,rgba(255,250,180,0.5) 50%,transparent 60%);animation:goldStreakLTR 1.8s ease-in-out infinite 0.9s;"></div>
     <div style="position:relative;width:28px;height:16px;border:0.5px solid rgba(255,200,0,0.9);border-radius:2px;z-index:2;background:rgba(255,180,0,0.1);box-shadow:0 0 6px rgba(255,200,0,0.9);"></div>
   </div>
   <div style="position:absolute;bottom:0;left:0;width:100%;height:10%;background:#000;opacity:1;z-index:2;"></div>
