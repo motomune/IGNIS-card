@@ -296,28 +296,27 @@ text-transform: uppercase;
 
 <script>
   // タップで音声ON
-  document.querySelector('.scene').addEventListener('click', function() {
-    const video = document.getElementById('bgVideo');
+    document.querySelector('.scene').addEventListener('click', function() {
+    var video = document.getElementById('bgVideo');
     video.muted = false;
     video.play();
   });
 
-  // 日本語テキストをJavaScriptで設定
   document.getElementById('jaText').innerText = '\u5275\u8a2d\u8005\u3000\u60c5\u5831';
 
-  // シークレットキー（あなただけが知っている）
-  const SECRET = "IGNIS2026";
+  var SECRET = "IGNIS2026";
+  var params = new URLSearchParams(window.location.search);
+  var name = params.get('n');
+  var id = params.get('i');
+  var token = params.get('t');
 
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get('n');
-  const id = params.get('i');
-  const token = params.get('t');
-
-  // トークン検証
   function generateToken(n, i) {
-    const str = n + i + SECRET;
-    let hash = 0;
-    for (let c of str) hash = ((hash << 5) - hash) + c.charCodeAt(0);
+    var str = n + i + SECRET;
+    var hash = 0;
+    for (var j = 0; j < str.length; j++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(j);
+      hash |= 0;
+    }
     return Math.abs(hash).toString(36).slice(0, 8);
   }
 
@@ -325,6 +324,7 @@ text-transform: uppercase;
     document.getElementById('userName').innerText = name;
     document.getElementById('memberID').innerText = 'IGNIS-' + id;
   }
+
 </script>
 
 </body>
