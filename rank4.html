@@ -23,25 +23,27 @@
     position: fixed;
     inset: 0;
     background: 
-      radial-gradient(ellipse at 20% 50%, rgba(180,40,10,0.15) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 50%, rgba(255,100,20,0.08) 0%, transparent 60%);
+      radial-gradient(ellipse at 20% 50%, rgba(180,10,10,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 50%, rgba(200,20,20,0.1) 0%, transparent 60%);
     animation: breathe 6s ease-in-out infinite alternate;
     pointer-events: none;
   }
   @keyframes breathe { from { opacity: 0.6; } to { opacity: 1; } }
-
 .hint {
-color: rgba(255,160,60,0.5);
-font-family: ‘Rajdhani’, sans-serif;
-font-size: 13px;
+color: rgba(255,180,80,0.95);
+font-family: 'Rajdhani', sans-serif;
+font-size: 15px;
 font-weight: 700;
 letter-spacing: 3px;
 text-transform: uppercase;
 margin-bottom: 32px;
+text-shadow: 0 0 12px rgba(255,120,30,0.9), 0 0 24px rgba(255,80,10,0.5);
 animation: pulse 2s ease-in-out infinite;
 }
-@keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
-
+@keyframes pulse {
+  0%,100%{ opacity:0.6; text-shadow: 0 0 8px rgba(255,120,30,0.6), 0 0 16px rgba(255,80,10,0.3); }
+  50%{ opacity:1.0; text-shadow: 0 0 16px rgba(255,150,50,1.0), 0 0 32px rgba(255,100,20,0.7), 0 0 48px rgba(255,60,0,0.3); }
+}
 .scene {
 width: 380px;
 height: 260px;
@@ -73,7 +75,6 @@ backface-visibility: hidden;
 -webkit-backface-visibility: hidden;
 overflow: hidden;
 }
-
 /* FRONT */
 .card-front {
 border: 1px solid rgba(255,100,30,0.4);
@@ -110,7 +111,7 @@ gap: 2px;
 padding-bottom: 0px;
 }
 .member-name {
-font-family: ‘Cinzel’, serif;
+font-family: 'Cinzel', serif;
 font-size: 16px;
 font-weight: 700;
 color: #fff;
@@ -123,13 +124,13 @@ justify-content: space-between;
 align-items: flex-end;
 }
 .member-number {
-font-family: ‘Rajdhani’, sans-serif;
+font-family: 'Rajdhani', sans-serif;
 font-size: 12px;
 color: rgba(255,200,80,0.9);
 letter-spacing: 2px;
 }
 .rank-badge {
-font-family: ‘Cinzel’, serif;
+font-family: 'Cinzel', serif;
 font-size: 10px;
 font-weight: 700;
 letter-spacing: 3px;
@@ -150,7 +151,6 @@ pointer-events: none;
 z-index: 4;
 }
 @keyframes shimmer { 0%{left:-100%} 50%,100%{left:150%} }
-
 /* BACK */
 .card-back {
 transform: rotateY(180deg);
@@ -160,14 +160,14 @@ box-shadow: 0 0 40px rgba(180,50,10,0.3), inset 0 1px 0 rgba(255,160,60,0.15);
 display: flex;
 flex-direction: column;
 align-items: center;
-justify-content: flex-end;
-gap: 6px;
-padding-bottom: 4px;
+justify-content: center;
+gap: 5px;
+padding: 10px 0 8px;
 isolation: isolate;
 z-index: 1;
 }
 .back-title {
-font-family: ‘Cinzel’, serif;
+font-family: 'Cinzel', serif;
 font-size: 14px;
 font-weight: 900;
 letter-spacing: 5px;
@@ -176,23 +176,44 @@ text-transform: uppercase;
 text-align: center;
 line-height: 1.6;
 }
+.qr-wrapper {
+display: flex;
+gap: 32px;
+align-items: center;
+justify-content: center;
+}
+.qr-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+}
+.qr-label {
+font-family: 'Rajdhani', sans-serif;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 3px;
+color: rgba(255,180,60,1.0);
+text-transform: uppercase;
+text-shadow: 0 0 10px rgba(255,130,30,1.0);
+}
 .qr-container {
-width: 110px;
-height: 110px;
-padding: 8px;
+width: 90px;
+height: 90px;
+padding: 6px;
 background: #fff;
 border-radius: 8px;
 box-shadow: 0 0 20px rgba(255,100,30,0.4);
 }
 .back-id {
-font-family: ‘Rajdhani’, sans-serif;
+font-family: 'Rajdhani', sans-serif;
 font-size: 14px;
 font-weight: 400;
 letter-spacing: 3px;
 color: rgba(255,160,60,0.9);
 }
 .back-logo {
-font-family: ‘Cinzel’, serif;
+font-family: 'Cinzel', serif;
 font-size: 14px;
 font-weight: 900;
 letter-spacing: 8px;
@@ -208,13 +229,11 @@ font-size: 11px;
 letter-spacing: 2px;
 color: rgba(255,130,50,0.35);
 text-transform: uppercase;
-}
-@keyframes spinRainbow {
+}@keyframes spinRainbow {
 0% { transform: rotate(0deg); }
 100% { transform: rotate(360deg); }
 }
 </style>
-
 </head>
 <body>
 
@@ -248,14 +267,27 @@ text-transform: uppercase;
 
 <!-- BACK -->
 <div class="card-face card-back">
-  <p class="back-title">Founder Information<br><span id="jaText" style="font-size:11px;letter-spacing:3px;font-weight:700;"></span></p>
-  <a href="https://linktr.ee/uchidamotomune" target="_blank" style="text-decoration:none;">
-    <div class="qr-container">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://linktr.ee/uchidamotomune" width="94" height="94" alt="QR Code" style="display:block;border-radius:2px;"/>
+  <p class="back-title" style="font-size:16px;letter-spacing:6px;">INFORMATION</p>
+  <div class="qr-wrapper">
+    <!-- QR① リンクツリー -->
+    <div class="qr-item">
+      <p class="qr-label">FOUNDER</p>
+      <a href="https://linktr.ee/uchidamotomune" target="_blank" style="text-decoration:none;">
+        <div class="qr-container">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://linktr.ee/uchidamotomune" width="78" height="78" alt="QR Code" style="display:block;border-radius:2px;"/>
+        </div>
+      </a>
     </div>
-  </a>
+    <!-- QR② MY WORLD -->
+    <div class="qr-item">
+      <p class="qr-label">MY WORLD</p>
+      <div class="qr-container" id="myWorldQR">
+        <img id="myWorldQRImg" src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://motomune.github.io/IGNIS-game/myworld" width="78" height="78" alt="MY WORLD QR" style="display:block;border-radius:2px;"/>
+      </div>
+    </div>
+  </div>
   <p style="font-family:'Dancing Script',cursive;font-size:22px;color:rgba(255,160,60,0.9);letter-spacing:2px;text-shadow:0 0 10px rgba(255,100,30,0.5);">You're not alone.</p>
-  <p class="back-id" id="memberID">IGNIS-0000-0001</p>
+  <p class="back-id" id="memberID">No. 0000-0001</p>
   <p class="back-logo">IGNIS</p>
 </div>
 ```
@@ -263,17 +295,16 @@ text-transform: uppercase;
   </div>
 </div>
 
-<p class="tap-hint">© IGNIS</p>
+<p class="tap-hint">&#169; IGNIS</p>
 
 <script>
-  // タップで音声ON
-    document.querySelector('.scene').addEventListener('click', function() {
+  document.querySelector('.scene').addEventListener('click', function() {
     var video = document.getElementById('bgVideo');
     video.muted = false;
     video.play();
   });
 
-  document.getElementById('jaText').innerText = '\u5275\u8a2d\u8005\u3000\u60c5\u5831';
+
 
   var SECRET = "IGNIS2026";
   var params = new URLSearchParams(window.location.search);
@@ -294,8 +325,10 @@ text-transform: uppercase;
   if (name && id && token && token === generateToken(name, id)) {
     document.getElementById('userName').innerText = name;
     document.getElementById('memberID').innerText = id;
+    var myWorldUrl = 'https://motomune.github.io/IGNIS-game/myworld?n=' + encodeURIComponent(name) + '&t=' + token;
+    var qrImg = document.getElementById('myWorldQRImg');
+    if(qrImg) qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=' + encodeURIComponent(myWorldUrl);
   }
-
 </script>
 
 </body>
