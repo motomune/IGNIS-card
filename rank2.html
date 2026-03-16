@@ -286,7 +286,7 @@ text-transform: uppercase;
     <div class="qr-item">
       <p class="qr-label">MY WORLD</p>
       <div class="qr-container" id="myWorldQR">
-        <img id="myWorldQRImg" src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://motomune.github.io/IGNIS-game/myworld" width="78" height="78" alt="MY WORLD QR" style="display:block;border-radius:2px;"/>
+        <img id="myWorldQRImg" src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://motomune.github.io/IGNIS-game/myworld.html" width="78" height="78" alt="MY WORLD QR" style="display:block;border-radius:2px;"/>
       </div>
     </div>
   </div>
@@ -329,7 +329,7 @@ text-transform: uppercase;
   if (name && id && token && token === generateToken(name, id)) {
     document.getElementById('userName').innerText = name;
     document.getElementById('memberID').innerText = id;
-    var myWorldUrl = 'https://motomune.github.io/IGNIS-game/myworld?n=' + encodeURIComponent(name) + '&t=' + token;
+    var myWorldUrl = 'https://motomune.github.io/IGNIS-game/myworld.html?n=' + encodeURIComponent(name) + '&t=' + token;
     var qrImg = document.getElementById('myWorldQRImg');
     if(qrImg) qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=' + encodeURIComponent(myWorldUrl);
   }
