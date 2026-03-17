@@ -329,9 +329,9 @@ text-transform: uppercase;
   if (name && id && token && token === generateToken(name, id)) {
     document.getElementById('userName').innerText = name;
     document.getElementById('memberID').innerText = id;
-    var myWorldUrl = 'https://motomune.github.io/IGNIS-game/myworld.html?n=' + encodeURIComponent(name) + '&t=' + token;
+    var myWorldUrl = 'https://motomune.github.io/IGNIS-game/myworld.html?n=' + encodeURIComponent(name) + '%26t=' + token;
     var qrImg = document.getElementById('myWorldQRImg');
-    if(qrImg) qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=' + encodeURIComponent(myWorldUrl);
+    if(qrImg) qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=' + encodeURIComponent(myWorldUrl) + '&bgcolor=ffffff&color=000000&margin=0';
   }
 </script>
 
