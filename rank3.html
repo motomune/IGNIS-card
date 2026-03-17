@@ -240,6 +240,10 @@ text-transform: uppercase;
 70% { opacity: 1; }
 100% { transform: translateX(60px); opacity: 0; }
 }
+@keyframes qrPulse {
+0%,100% { opacity:0.7; box-shadow:0 0 10px rgba(255,100,30,0.3); }
+50% { opacity:1.0; box-shadow:0 0 20px rgba(255,150,50,0.9), 0 0 35px rgba(255,80,10,0.5); }
+}
 </style>
 </head>
 <body>
@@ -280,18 +284,22 @@ text-transform: uppercase;
     <!-- QR① リンクツリー -->
     <div class="qr-item">
       <p class="qr-label">FOUNDER</p>
-      <a href="https://linktr.ee/uchidamotomune" target="_blank" style="text-decoration:none;">
-        <div class="qr-container">
+      <a href="https://linktr.ee/uchidamotomune" target="_blank" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div class="qr-container" style="animation:qrPulse 2s ease-in-out infinite;">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://linktr.ee/uchidamotomune" width="78" height="78" alt="QR Code" style="display:block;border-radius:2px;"/>
         </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;color:rgba(255,160,60,0.9);text-align:center;text-shadow:0 0 8px rgba(255,100,30,0.8);animation:qrPulse 2s ease-in-out infinite;">⬆️ Tap the QR code ⬆️</div>
       </a>
     </div>
     <!-- QR② MY WORLD -->
     <div class="qr-item">
       <p class="qr-label">MY WORLD</p>
-      <div class="qr-container" id="myWorldQR">
-        <img id="myWorldQRImg" src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://motomune.github.io/IGNIS-game/myworld.html" width="78" height="78" alt="MY WORLD QR" style="display:block;border-radius:2px;"/>
-      </div>
+      <a id="myWorldLink" href="https://motomune.github.io/IGNIS-game/myworld.html" target="_blank" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div class="qr-container" id="myWorldQR" style="animation:qrPulse 2s ease-in-out infinite;box-shadow:0 0 20px rgba(255,100,30,0.4);">
+          <img id="myWorldQRImg" src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://motomune.github.io/IGNIS-game/myworld.html" width="78" height="78" alt="MY WORLD QR" style="display:block;border-radius:2px;"/>
+        </div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;color:rgba(255,160,60,0.9);text-align:center;text-shadow:0 0 8px rgba(255,100,30,0.8);animation:qrPulse 2s ease-in-out infinite;">⬆️ Tap the QR code ⬆️</div>
+      </a>
     </div>
   </div>
   <p style="font-family:'Dancing Script',cursive;font-size:22px;color:rgba(255,160,60,0.9);letter-spacing:2px;text-shadow:0 0 10px rgba(255,100,30,0.5);">You're not alone.</p>
