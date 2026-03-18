@@ -290,7 +290,7 @@ text-transform: uppercase;
     <!-- QR② MY WORLD -->
     <div class="qr-item">
       <p class="qr-label">MY WORLD</p>
-      <a id="myWorldLink" href="https://motomune.github.io/IGNIS-game/myworld.html" target="_blank" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px;">
+      <a id="myWorldLink" href="https://motomune.github.io/IGNIS-game/myworld.html" target="_self" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px;">
         <div class="qr-container" id="myWorldQR" style="animation:qrPulse 2s ease-in-out infinite;box-shadow:0 0 20px rgba(255,100,30,0.4);">
           <img id="myWorldQRImg" src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://motomune.github.io/IGNIS-game/myworld.html" width="78" height="78" alt="MY WORLD QR" style="display:block;border-radius:2px;"/>
         </div>
@@ -337,9 +337,11 @@ text-transform: uppercase;
   if (name && id && token && token === generateToken(name, id)) {
     document.getElementById('userName').innerText = name;
     document.getElementById('memberID').innerText = id;
-    var myWorldUrl = 'https://motomune.github.io/IGNIS-game/myworld.html?n=' + encodeURIComponent(name) + '%26t=' + token;
+    var myWorldUrl = 'https://motomune.github.io/IGNIS-game/myworld.html?n=' + encodeURIComponent(name) + '&t=' + token;
     var qrImg = document.getElementById('myWorldQRImg');
-    if(qrImg) qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=' + encodeURIComponent(myWorldUrl) + '&bgcolor=ffffff&color=000000&margin=0';
+    if(qrImg) qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=' + encodeURIComponent(myWorldUrl.replace('&t=','%26t='));
+    var qrLink = document.getElementById('myWorldLink');
+    if(qrLink) qrLink.href = myWorldUrl;
   }
 </script>
 
