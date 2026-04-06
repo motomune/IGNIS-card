@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IGNIS アカウント管理 / Account Management</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a1a; color: #fff; font-family: 'Arial', sans-serif;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 24px 16px;
+    }
+    .lang-bar { display: flex; gap: 6px; margin-bottom: 16px; }
+    .lang-btn {
+      padding: 6px 16px; border: 1px solid #2a2a4a; border-radius: 20px;
+      background: transparent; color: #666; font-size: 12px; font-weight: bold;
+      cursor: pointer; letter-spacing: 1px; transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: #ff6b35; border-color: #ff6b35; color: #fff;
+      box-shadow: 0 2px 12px rgba(255,107,53,0.4);
+    }
+    .logo {
+      font-size: 36px; font-weight: bold; letter-spacing: 4px; color: #ff6b35;
+      margin-bottom: 4px; text-shadow: 0 0 20px rgba(255,107,53,0.5);
+    }
+    .logo-sub { font-size: 13px; color: #888; letter-spacing: 2px; margin-bottom: 28px; }
+    .card {
+      background: #111128; border: 1px solid #2a2a4a; border-radius: 20px;
+      padding: 32px 28px; width: 100%; max-width: 420px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+    .tabs {
+      display: flex; gap: 6px; margin-bottom: 28px;
+      background: #0a0a1a; border-radius: 12px; padding: 4px;
+    }
+    .tab {
+      flex: 1; padding: 10px 6px; border: none; border-radius: 10px;
+      background: transparent; color: #666; cursor: pointer; font-size: 11px;
+      font-weight: bold; transition: all 0.2s; letter-spacing: 0.5px;
+    }
+    .tab.active {
+      background: #ff6b35; color: #fff;
+      box-shadow: 0 2px 12px rgba(255,107,53,0.4);
+    }
+    .section { display: none; }
+    .section.active { display: block; }
+    .field-label { font-size: 12px; color: #888; margin-bottom: 6px; letter-spacing: 1px; }
+    .field { margin-bottom: 16px; }
+    input {
+      width: 100%; padding: 14px 16px; border-radius: 10px;
+      border: 1px solid #2a2a4a; background: #0a0a1a; color: #fff;
+      font-size: 16px; transition: border-color 0.2s; outline: none;
+    }
+    input:focus { border-color: #ff6b35; }
+    input::placeholder { color: #444; }
+    .rule {
+      font-size: 11px; color: #555; margin-top: 6px;
+      line-height: 1.8; display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .rule span { transition: color 0.2s; }
+    .rule span.ok { color: #4caf50; }
+    button.submit {
+      width: 100%; padding: 16px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #ff6b35, #ff3d00); color: #fff;
+      font-size: 16px; font-weight: bold; cursor: pointer; letter-spacing: 1px;
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(255,107,53,0.3); margin-top: 4px;
+    }
+    button.submit:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(255,107,53,0.5); }
+    button.submit:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; box-shadow: none; }
+    .msg {
+      margin-top: 16px; padding: 14px 16px; border-radius: 10px;
+      font-size: 14px; text-align: center; display: none; line-height: 1.5;
+    }
+    .msg.ok      { background: rgba(76,175,80,0.15);  border: 1px solid rgba(76,175,80,0.3);  color: #4caf50; }
+    .msg.err     { background: rgba(244,67,54,0.15);  border: 1px solid rgba(244,67,54,0.3);  color: #f44336; }
+    .msg.loading { background: rgba(255,107,53,0.1);  border: 1px solid rgba(255,107,53,0.2); color: #ff6b35; }
+    .divider { height: 1px; background: #1a1a3a; margin: 20px 0; }
+    .reset-note { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.7; white-space: pre-line; }
+    .footer { margin-top: 20px; font-size: 11px; color: #444; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('ja')">🇯🇵 日本語</button>
+    <button class="lang-btn" onclick="setLang('en')">🇺🇸 English</button>
+  </div>
+
+  <div class="logo">🔥 IGNIS</div>
+  <div class="logo-sub" id="logo-sub">ACCOUNT MANAGEMENT</div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" id="tab-register" onclick="showTab('register')"></button>
+      <button class="tab" id="tab-change" onclick="showTab('change')"></button>
+      <button class="tab" id="tab-reset" onclick="showTab('reset')"></button>
+    </div>
+
+    <!-- 新規登録 / Register -->
+    <div class="section active" id="register">
+      <div class="field">
+        <div class="field-label" id="lbl-reg-xid"></div>
+        <input id="reg-xid" type="text" autocomplete="off" autocapitalize="none">
+      </div>
+      <div class="field">
+        <div class="field-label" id="lbl-reg-email"></div>
+        <input id="reg-email" type="email">
+      </div>
+      <div class="field">
+        <div class="field-label" id="lbl-reg-pass"></div>
+        <input id="reg-pass" type="password" oninput="checkRules(this.value)">
+        <div class="rule">
+          <span id="rule-len"></span>
+          <span id="rule-upper"></span>
+          <span id="rule-lower"></span>
+          <span id="rule-num"></span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label" id="lbl-reg-pass2"></div>
+        <input id="reg-pass2" type="password">
+      </div>
+      <button class="submit" id="btn-register" onclick="submit('register')"></button>
+    </div>
+
+    <!-- パスワード変更 / Change Password -->
+    <div class="section" id="change">
+      <div class="field">
+        <div class="field-label" id="lbl-chg-xid"></div>
+        <input id="chg-xid" type="text" autocapitalize="none">
+      </div>
+      <div class="field">
+        <div class="field-label" id="lbl-chg-email"></div>
+        <input id="chg-email" type="email">
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <div class="field-label" id="lbl-chg-pass"></div>
+        <input id="chg-pass" type="password">
+      </div>
+      <div class="field">
+        <div class="field-label" id="lbl-chg-pass2"></div>
+        <input id="chg-pass2" type="password">
+      </div>
+      <button class="submit" id="btn-change" onclick="submit('change')"></button>
+    </div>
+
+    <!-- パスワードリセット / Reset Password -->
+    <div class="section" id="reset">
+      <p class="reset-note" id="reset-note"></p>
+      <div class="field">
+        <div class="field-label" id="lbl-rst-xid"></div>
+        <input id="rst-xid" type="text" autocapitalize="none">
+      </div>
+      <div class="field">
+        <div class="field-label" id="lbl-rst-email"></div>
+        <input id="rst-email" type="email">
+      </div>
+      <button class="submit" id="btn-reset" onclick="submit('reset')"></button>
+    </div>
+
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <div class="footer" id="footer">© IGNIS. All rights reserved.</div>
+
+<script>
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbw1x54cdUzmcQqkPpUlslbNM4P2FKFejwGV1ClqwvNj9nXKtUw5FaEWXa4CuLA_ZuLwrQ/exec';
+
+  const TEXT = {
+    ja: {
+      logoSub: 'アカウント管理',
+      tabRegister: '新規登録', tabChange: 'パスワード変更', tabReset: 'パスワードを忘れた',
+      lblRegXid: 'X ID', lblRegEmail: 'メールアドレス', lblRegPass: 'パスワード', lblRegPass2: 'パスワード（確認）',
+      phRegXid: '@なしでもOK（例：motomune）', phRegEmail: 'example@gmail.com',
+      phRegPass: 'パスワードを設定', phRegPass2: 'もう一度入力',
+      btnRegister: '登録する',
+      lblChgXid: 'X ID', lblChgEmail: '登録済みメールアドレス',
+      lblChgPass: '新しいパスワード', lblChgPass2: '新しいパスワード（確認）',
+      phChgXid: '登録済みのX ID', phChgEmail: '登録時に使ったメールアドレス',
+      phChgPass: '新しいパスワードを設定', phChgPass2: 'もう一度入力',
+      btnChange: '変更する',
+      resetNote: '登録済みのX IDとメールアドレスを入力してください。\n仮パスワードをメールで送ります。',
+      lblRstXid: 'X ID', lblRstEmail: '登録済みメールアドレス',
+      phRstXid: '登録済みのX ID', phRstEmail: '登録時に使ったメールアドレス',
+      btnReset: '仮パスワードをメールで受け取る',
+      ruleLen: '8文字以上', ruleUpper: '大文字', ruleLower: '小文字', ruleNum: '数字',
+      errXid: 'X IDを入力してください', errEmail: 'メールアドレスを入力してください',
+      errMatch: 'パスワードが一致しません', errLen: '8文字以上にしてください',
+      errLower: '小文字英字を含めてください', errUpper: '大文字英字を含めてください', errNum: '数字を含めてください',
+      sending: '送信中...',
+      okRegister: '✅ 送信完了！登録確認メールをご確認ください',
+      okChange: '✅ 送信完了！パスワード変更の確認メールをご確認ください',
+      okReset: '✅ 送信完了！仮パスワードのメールをご確認ください',
+      errNetwork: '通信エラーが発生しました。しばらくしてからもう一度お試しください。',
+      footer: '© IGNIS. All rights reserved.',
+    },
+    en: {
+      logoSub: 'ACCOUNT MANAGEMENT',
+      tabRegister: 'Register', tabChange: 'Change Password', tabReset: 'Forgot Password',
+      lblRegXid: 'X ID', lblRegEmail: 'Email Address', lblRegPass: 'Password', lblRegPass2: 'Confirm Password',
+      phRegXid: 'Without @ (e.g. motomune)', phRegEmail: 'example@gmail.com',
+      phRegPass: 'Set your password', phRegPass2: 'Enter again',
+      btnRegister: 'Register',
+      lblChgXid: 'X ID', lblChgEmail: 'Registered Email',
+      lblChgPass: 'New Password', lblChgPass2: 'Confirm New Password',
+      phChgXid: 'Your registered X ID', phChgEmail: 'Email used at registration',
+      phChgPass: 'Set new password', phChgPass2: 'Enter again',
+      btnChange: 'Change Password',
+      resetNote: 'Enter your registered X ID and email.\nWe will send you a temporary password.',
+      lblRstXid: 'X ID', lblRstEmail: 'Registered Email',
+      phRstXid: 'Your registered X ID', phRstEmail: 'Email used at registration',
+      btnReset: 'Send Temporary Password',
+      ruleLen: '8+ chars', ruleUpper: 'Uppercase', ruleLower: 'Lowercase', ruleNum: 'Number',
+      errXid: 'Please enter your X ID', errEmail: 'Please enter your email address',
+      errMatch: 'Passwords do not match', errLen: 'Must be at least 8 characters',
+      errLower: 'Must include a lowercase letter', errUpper: 'Must include an uppercase letter', errNum: 'Must include a number',
+      sending: 'Sending...',
+      okRegister: '✅ Sent! Please check your registration email.',
+      okChange: '✅ Sent! Please check your password change email.',
+      okReset: '✅ Sent! Please check your email for a temporary password.',
+      errNetwork: 'A network error occurred. Please try again later.',
+      footer: '© IGNIS. All rights reserved.',
+    }
+  };
+
+  let lang = 'ja';
+
+  function setLang(l) {
+    lang = l;
+    document.querySelectorAll('.lang-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', ['ja','en'][i] === l);
+    });
+    applyText();
+    checkRules(document.getElementById('reg-pass').value);
+  }
+
+  function applyText() {
+    const t = TEXT[lang];
+    document.getElementById('logo-sub').textContent = t.logoSub;
+    document.getElementById('tab-register').textContent = t.tabRegister;
+    document.getElementById('tab-change').textContent = t.tabChange;
+    document.getElementById('tab-reset').textContent = t.tabReset;
+    document.getElementById('lbl-reg-xid').textContent = t.lblRegXid;
+    document.getElementById('lbl-reg-email').textContent = t.lblRegEmail;
+    document.getElementById('lbl-reg-pass').textContent = t.lblRegPass;
+    document.getElementById('lbl-reg-pass2').textContent = t.lblRegPass2;
+    document.getElementById('reg-xid').placeholder = t.phRegXid;
+    document.getElementById('reg-email').placeholder = t.phRegEmail;
+    document.getElementById('reg-pass').placeholder = t.phRegPass;
+    document.getElementById('reg-pass2').placeholder = t.phRegPass2;
+    document.getElementById('btn-register').textContent = t.btnRegister;
+    document.getElementById('lbl-chg-xid').textContent = t.lblChgXid;
+    document.getElementById('lbl-chg-email').textContent = t.lblChgEmail;
+    document.getElementById('lbl-chg-pass').textContent = t.lblChgPass;
+    document.getElementById('lbl-chg-pass2').textContent = t.lblChgPass2;
+    document.getElementById('chg-xid').placeholder = t.phChgXid;
+    document.getElementById('chg-email').placeholder = t.phChgEmail;
+    document.getElementById('chg-pass').placeholder = t.phChgPass;
+    document.getElementById('chg-pass2').placeholder = t.phChgPass2;
+    document.getElementById('btn-change').textContent = t.btnChange;
+    document.getElementById('reset-note').textContent = t.resetNote;
+    document.getElementById('lbl-rst-xid').textContent = t.lblRstXid;
+    document.getElementById('lbl-rst-email').textContent = t.lblRstEmail;
+    document.getElementById('rst-xid').placeholder = t.phRstXid;
+    document.getElementById('rst-email').placeholder = t.phRstEmail;
+    document.getElementById('btn-reset').textContent = t.btnReset;
+    document.getElementById('footer').textContent = t.footer;
+    hideMsg();
+    updateRuleText();
+  }
+
+  function updateRuleText() {
+    const t = TEXT[lang];
+    const pass = document.getElementById('reg-pass').value;
+    setRule('rule-len',   pass.length >= 8, t.ruleLen);
+    setRule('rule-upper', /[A-Z]/.test(pass), t.ruleUpper);
+    setRule('rule-lower', /[a-z]/.test(pass), t.ruleLower);
+    setRule('rule-num',   /[0-9]/.test(pass), t.ruleNum);
+  }
+
+  function showTab(tab) {
+    const tabs = ['register','change','reset'];
+    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', tabs[i] === tab));
+    document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === tab));
+    hideMsg();
+  }
+
+  function checkRules(val) {
+    const t = TEXT[lang];
+    setRule('rule-len',   val.length >= 8, t.ruleLen);
+    setRule('rule-upper', /[A-Z]/.test(val), t.ruleUpper);
+    setRule('rule-lower', /[a-z]/.test(val), t.ruleLower);
+    setRule('rule-num',   /[0-9]/.test(val), t.ruleNum);
+  }
+
+  function setRule(id, ok, label) {
+    const el = document.getElementById(id);
+    el.classList.toggle('ok', ok);
+    el.textContent = (ok ? '✓ ' : '○ ') + label;
+  }
+
+  function validatePass(pass) {
+    const t = TEXT[lang];
+    if (pass.length < 8)     return t.errLen;
+    if (!/[a-z]/.test(pass)) return t.errLower;
+    if (!/[A-Z]/.test(pass)) return t.errUpper;
+    if (!/[0-9]/.test(pass)) return t.errNum;
+    return null;
+  }
+
+  async function submit(action) {
+    const btn = event.target;
+    const t = TEXT[lang];
+    btn.disabled = true;
+    showMsg(t.sending, 'loading');
+
+    let payload = { action };
+
+    if (action === 'register') {
+      const xid   = document.getElementById('reg-xid').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const pass  = document.getElementById('reg-pass').value;
+      const pass2 = document.getElementById('reg-pass2').value;
+      if (!xid)           { showMsg(t.errXid,  'err'); btn.disabled=false; return; }
+      if (!email)         { showMsg(t.errEmail, 'err'); btn.disabled=false; return; }
+      if (pass !== pass2) { showMsg(t.errMatch, 'err'); btn.disabled=false; return; }
+      const err = validatePass(pass);
+      if (err)            { showMsg(err,        'err'); btn.disabled=false; return; }
+      payload.xid = xid; payload.email = email; payload.password = pass;
+    }
+
+    if (action === 'change') {
+      const xid   = document.getElementById('chg-xid').value.trim();
+      const email = document.getElementById('chg-email').value.trim();
+      const pass  = document.getElementById('chg-pass').value;
+      const pass2 = document.getElementById('chg-pass2').value;
+      if (!xid)           { showMsg(t.errXid,  'err'); btn.disabled=false; return; }
+      if (!email)         { showMsg(t.errEmail, 'err'); btn.disabled=false; return; }
+      if (pass !== pass2) { showMsg(t.errMatch, 'err'); btn.disabled=false; return; }
+      const err = validatePass(pass);
+      if (err)            { showMsg(err,        'err'); btn.disabled=false; return; }
+      payload.xid = xid; payload.email = email; payload.newPassword = pass;
+    }
+
+    if (action === 'reset') {
+      const xid   = document.getElementById('rst-xid').value.trim();
+      const email = document.getElementById('rst-email').value.trim();
+      if (!xid)   { showMsg(t.errXid,  'err'); btn.disabled=false; return; }
+      if (!email) { showMsg(t.errEmail,'err'); btn.disabled=false; return; }
+      payload.xid = xid; payload.email = email;
+    }
+
+    try {
+      await fetch(GAS_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const okMsg = action==='register' ? t.okRegister : action==='change' ? t.okChange : t.okReset;
+      showMsg(okMsg, 'ok');
+    } catch(e) {
+      showMsg(t.errNetwork, 'err');
+    }
+    btn.disabled = false;
+  }
+
+  function showMsg(text, type) {
+    const el = document.getElementById('msg');
+    el.textContent = text; el.className = 'msg ' + type; el.style.display = 'block';
+  }
+
+  function hideMsg() { document.getElementById('msg').style.display = 'none'; }
+
+  applyText();
+</script>
+</body>
+</html>
