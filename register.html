@@ -6,11 +6,23 @@
   <title>IGNIS アカウント管理 / Account Management</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       background: #0a0a1a; color: #fff; font-family: 'Arial', sans-serif;
       min-height: 100vh; display: flex; flex-direction: column;
       align-items: center; justify-content: center; padding: 24px 16px;
+      position: relative; overflow-x: hidden;
     }
+
+    /* ── 火の粉キャンバス ── */
+    #fire-canvas {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* 全コンテンツをキャンバスより前面に */
+    .lang-bar, .logo, .logo-sub, .card, .footer { position: relative; z-index: 1; }
+
     .lang-bar { display: flex; gap: 6px; margin-bottom: 16px; }
     .lang-btn {
       padding: 6px 16px; border: 1px solid #2a2a4a; border-radius: 20px;
@@ -48,13 +60,34 @@
     .section.active { display: block; }
     .field-label { font-size: 12px; color: #888; margin-bottom: 6px; letter-spacing: 1px; }
     .field { margin-bottom: 16px; }
+
+    /* ── 入力欄：未入力で点滅、入力済みで点滅停止 ── */
+    @keyframes blink-border {
+      0%, 100% { border-color: #ff6b35; box-shadow: 0 0 0 0 rgba(255,107,53,0); }
+      50%       { border-color: #ff3d00; box-shadow: 0 0 8px 2px rgba(255,107,53,0.55); }
+    }
+
     input {
       width: 100%; padding: 14px 16px; border-radius: 10px;
-      border: 1px solid #2a2a4a; background: #0a0a1a; color: #fff;
-      font-size: 16px; transition: border-color 0.2s; outline: none;
+      border: 1.5px solid #2a2a4a; background: #0a0a1a; color: #fff;
+      font-size: 16px; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      animation: blink-border 1.4s ease-in-out infinite;
     }
-    input:focus { border-color: #ff6b35; }
+    /* 入力済み → 点滅なし・緑枠 */
+    input.filled {
+      animation: none;
+      border-color: #4caf50;
+      box-shadow: 0 0 6px rgba(76,175,80,0.25);
+    }
+    /* フォーカス中は点滅なし・橙枠 */
+    input:focus {
+      animation: none;
+      border-color: #ff6b35;
+      box-shadow: 0 0 10px rgba(255,107,53,0.4);
+    }
     input::placeholder { color: #444; }
+
     .rule {
       font-size: 11px; color: #555; margin-top: 6px;
       line-height: 1.8; display: flex; flex-wrap: wrap; gap: 6px;
@@ -82,6 +115,9 @@
   </style>
 </head>
 <body>
+
+  <!-- 火の粉キャンバス -->
+  <canvas id="fire-canvas"></canvas>
 
   <div class="lang-bar">
     <button class="lang-btn active" onclick="setLang('ja')">🇯🇵 日本語</button>
@@ -167,6 +203,95 @@
   <div class="footer" id="footer">© IGNIS. All rights reserved.</div>
 
 <script>
+  /* ════════════════════════════════════════
+     🔥 火の粉パーティクル
+  ════════════════════════════════════════ */
+  (function() {
+    const canvas = document.getElementById('fire-canvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // パーティクル設定
+    const PARTICLES = 120;
+    const sparks = [];
+
+    function randomSpark(forceBottom) {
+      const x = Math.random() * W;
+      const y = forceBottom ? H + Math.random() * 40 : Math.random() * H;
+      return {
+        x, y,
+        vx: (Math.random() - 0.5) * 1.2,   // 左右ゆらぎ
+        vy: -(Math.random() * 2.5 + 1.0),   // 上昇速度
+        life:  Math.random(),                // 0→1→0
+        decay: Math.random() * 0.008 + 0.004,
+        size:  Math.random() * 2.5 + 0.8,
+        hue:   Math.random() * 40,           // 赤〜橙〜黄
+      };
+    }
+
+    for (let i = 0; i < PARTICLES; i++) sparks.push(randomSpark(false));
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      for (let s of sparks) {
+        // 明滅: life が 0.5 でピーク → sin カーブで自然な輝き
+        const alpha = Math.sin(s.life * Math.PI) * 0.9;
+        const r = s.size * (0.5 + Math.sin(s.life * Math.PI) * 0.5);
+
+        // グロー（大きめ・低透明）
+        const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, r * 4);
+        grad.addColorStop(0, `hsla(${s.hue}, 100%, 70%, ${alpha * 0.6})`);
+        grad.addColorStop(1, `hsla(${s.hue}, 100%, 50%, 0)`);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, r * 4, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // コア（小さく鮮やか）
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${s.hue}, 100%, 85%, ${alpha})`;
+        ctx.fill();
+
+        // 更新
+        s.x  += s.vx + Math.sin(s.life * 8) * 0.4; // ゆらめき
+        s.y  += s.vy;
+        s.vy -= 0.02; // 加速しながら上昇
+        s.life += s.decay;
+
+        // 寿命が尽きたら下から再生成
+        if (s.life >= 1 || s.y < -20) {
+          Object.assign(s, randomSpark(true));
+          s.life = 0;
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ════════════════════════════════════════
+     入力欄：入力済み判定で filled クラス付与
+  ════════════════════════════════════════ */
+  document.querySelectorAll('input').forEach(input => {
+    const update = () => {
+      input.classList.toggle('filled', input.value.trim().length > 0);
+    };
+    input.addEventListener('input', update);
+    input.addEventListener('change', update);
+  });
+
+  /* ════════════════════════════════════════
+     以下、元のロジックをそのまま保持
+  ════════════════════════════════════════ */
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbw1x54cdUzmcQqkPpUlslbNM4P2FKFejwGV1ClqwvNj9nXKtUw5FaEWXa4CuLA_ZuLwrQ/exec';
 
   const TEXT = {
